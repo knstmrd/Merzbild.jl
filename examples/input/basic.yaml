@@ -4,9 +4,11 @@ particles file: particles.yaml
 interactions file: interactions.yaml
 
 initial conditions:
-  species: N
-  ndens: 1e23
-  fnum: 1e16
+  - species: N
+    ndens: 1e23
+    fnum: 1e16
+    distribution function: Maxwellian
+    distribution function offset: [0.0, 0.0, 0.0]
 
 global ndens: 1e23
 global fnum: 1e16
