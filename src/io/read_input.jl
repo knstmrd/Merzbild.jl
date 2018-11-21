@@ -55,10 +55,11 @@ function parse_input(filename)
         sp.fnum = get(k, "fnum", -1.0)
         sp.nparticles = get(k, "nparticles", -1.0)
         sp.ndens = get(k, "ndens", -1.0)
-        sp.nfrac = get(k, "ndens", -1.0)
+        sp.nfrac = get(k, "nfrac", -1.0)
         sp.p = get(k, "p", -1.0)
         sp.rho = get(k, "rho", -1.0)
         sp.rhofrac = get(k, "rhofrac", -1.0)
+        sp.T = get(k, "T", -1.0)
 
         push!(species_params, sp)
     end
