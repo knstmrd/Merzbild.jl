@@ -5,13 +5,17 @@ interactions file: interactions.yaml
 
 initial conditions:
   - species: N
-    ndens: 1e23
+    # ndens: 1e23
     fnum: 1e16
+    nfrac: 1.0
     distribution function: Maxwellian
     distribution function offset: [0.0, 0.0, 0.0]
+    T: 300
 
 global ndens: 1e23
-global fnum: 1e16
+# global fnum: 1e16
+# global p: 101325
+# global T: 293
 
 timestep: 1e-7
 number of timesteps: 1000
