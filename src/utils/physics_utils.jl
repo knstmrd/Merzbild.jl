@@ -2,8 +2,62 @@ function compute_initial_conditions(species_params, global_params)
 
 end
 
-function check_initial_conditions_species(species_params, global_fnum, full_init_species)
+function check_initial_conditions_species(species_params, global_params, global_fnum, global_T, full_init_species)
+    for sp in species_params
+        if (global_fnum)
+            if sp.fnum < 0.0
+                sp.fnum = global_params.fnum
+            else
+                error("Cannot specify global fnum AND species-specific fnum (specified for species " * sp.species * ")")
+            end
+        else
+            if sp.fnum < 0.0
+                error("fnum not specified for species " * sp.species)
+            end
+        end
 
+        if (global_T)
+            if sp.T < 0.0
+                sp.T = global_params.T
+            else
+                error("Cannot specify global T AND species-specific T (specified for species " * sp.species * ")")
+            end
+        else
+            if sp.T < 0.0
+                error("T not specified for species " * sp.species)
+            end
+        end
+
+        if (full_init_species)
+            if ((sp.ndens < 0.0) && (sp.p < 0.0) && (sp.rho < 0.0))
+                error("Need to specify either global or species number density/pressure/density; none specified for species " * sp.species)
+            else
+                if (sp.ndens >= 0.0)
+                    if ((sp.p >= 0.0) || (sp.rho > 0.0))
+                        error("Cannot specify species number density AND species pressure/density; both specified for species " * sp.species)
+                    end
+                elseif (sp.p >= 0.0)
+                    if (sp.rho > 0.0)
+                        error("Cannot specify species pressure AND species density; both specified for species " * sp.species)
+                    end
+                end
+
+                if (sp.p >= 0.0)
+                    sp.ndens = sp.p / (1.38064852e-23 * sp.T)
+                end
+            end
+        else
+            if ((sp.ndens > 0.0) || (sp.p > 0.0) || (sp.rho > 0.0))
+                error("Cannot specify global number density/pressure/density AND species number density/pressure/density; both specified for species " * sp.species)
+            else
+                if ((sp.nfrac > 0.0) && (sp.rhofrac > 0.0))
+                    error("Cannot specify molar fraction AND mass fraction; both specified for species " * sp.species)
+                elseif ((sp.nfrac < 0.0) && (sp.rhofrac < 0.0))
+                    error("Molar fraction/mass fraction not specified for species " * sp.species)
+                end
+            end
+        end
+    end
 end
 
 function check_initial_conditions(species_params, global_params)
@@ -49,15 +103,24 @@ function check_initial_conditions(species_params, global_params)
 
     if (global_p)
         if (global_T)
+            global_ndens = true
             global_params.ndens = global_params.p / (1.38064852e-23 * global_params.T)
         else
             error("Cannot specify global pressure without specifying global temperature")
         end
     end
 
-    if ((!global_ndens) && (!global_p) && (!global_rho))
+    if ((!global_ndens) && (!global_p) && (!global_rho) && (!global_np))
         full_init_species = true
     end
 
-    check_initial_conditions_species(species_params, global_fnum, full_init_species)
+    if ((global_ndens) && (global_fnum) && (global_np))
+        error("Cannot specify global number density, fnum and number of particles simultaneously")
+    end
+
+    # if ((global_ndens) && (global_fnum))
+    #     global_params.nparticles = global_ndens / global_fnum
+    # end
+
+    check_initial_conditions_species(species_params, global_params, global_fnum, global_T, full_init_species)
 end
