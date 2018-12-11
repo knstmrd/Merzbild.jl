@@ -1,4 +1,4 @@
-function compute_initial_conditions(species_params, global_params)
+function compute_initial_conditions(species_params, global_params, particle_data)
 
 end
 
@@ -43,7 +43,7 @@ function check_initial_conditions_species(species_params, global_params, global_
                 end
 
                 if (sp.p >= 0.0)
-                    sp.ndens = sp.p / (1.38064852e-23 * sp.T)
+                    sp.ndens = sp.p / (constants.k * sp.T)
                 end
             end
         else
@@ -104,7 +104,7 @@ function check_initial_conditions(species_params, global_params)
     if (global_p)
         if (global_T)
             global_ndens = true
-            global_params.ndens = global_params.p / (1.38064852e-23 * global_params.T)
+            global_params.ndens = global_params.p / (constants.k * global_params.T)
         else
             error("Cannot specify global pressure without specifying global temperature")
         end
