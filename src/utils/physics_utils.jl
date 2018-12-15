@@ -2,7 +2,7 @@ function compute_initial_conditions(species_params, global_params, particle_data
 
 end
 
-function check_initial_conditions_species(species_params, global_params, global_fnum, global_T, full_init_species)
+function check_initial_conditions_species(global_params, species_params, global_fnum, global_T, full_init_species)
     for sp in species_params
         if (global_fnum)
             if sp.fnum < 0.0
@@ -60,7 +60,7 @@ function check_initial_conditions_species(species_params, global_params, global_
     end
 end
 
-function check_initial_conditions(species_params, global_params)
+function check_initial_conditions(global_params, species_params)
     # check initial conditions for consistency
     global_fnum = false
     global_np = false
@@ -118,9 +118,5 @@ function check_initial_conditions(species_params, global_params)
         error("Cannot specify global number density, fnum and number of particles simultaneously")
     end
 
-    # if ((global_ndens) && (global_fnum))
-    #     global_params.nparticles = global_ndens / global_fnum
-    # end
-
-    check_initial_conditions_species(species_params, global_params, global_fnum, global_T, full_init_species)
+    check_initial_conditions_species(global_params, species_params, global_fnum, global_T, full_init_species)
 end
