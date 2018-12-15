@@ -19,7 +19,7 @@ end
 
 mutable struct GlobalParams
     description::String
-    particles_file::String
+    species_file::String
     interactions_file::String
 
     fnum::Float64
@@ -39,7 +39,7 @@ function parse_input(filename)
 
     species_params = SpeciesParams[]
 
-    global_params =  GlobalParams(data["description"], data["particles file"], data["interactions file"], -1.0, -1, -1.0, -1.0, -1.0, -1.0,
+    global_params =  GlobalParams(data["description"], data["species file"], data["interactions file"], -1.0, -1, -1.0, -1.0, -1.0, -1.0,
                                   data["timestep"], data["number of timesteps"], true)
 
     global_params.fnum = get(data, "global fnum", -1.0)

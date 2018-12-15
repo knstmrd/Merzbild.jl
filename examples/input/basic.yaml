@@ -1,6 +1,6 @@
 description: Just an example basic input file
 
-particles file: particles.yaml
+species file: particles.yaml
 interactions file: interactions.yaml
 
 initial conditions:
