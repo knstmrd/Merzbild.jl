@@ -2,6 +2,7 @@ include("utils/constants.jl")
 include("io/read_input.jl")
 include("io/screen_output.jl")
 include("utils/physics_utils.jl")
+include("data/species.jl")
 
 function main()
     global_params, species_params = parse_input(ARGS[1])
