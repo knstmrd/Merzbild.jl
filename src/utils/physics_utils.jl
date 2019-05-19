@@ -1,5 +1,9 @@
-function compute_initial_conditions(species_params, global_params, particle_data)
+function compute_initial_conditions(global_params, species_params, species_data)
+    for species_param in species_params
+        species_param.nparticles = round(Int64, global_params.ndens / species_param.fnum)
 
+        println("Will create ", species_param.nparticles, " particles of species ", species_param.species)
+    end
 end
 
 function check_initial_conditions_species(global_params, species_params, global_fnum, global_T, full_init_species)
