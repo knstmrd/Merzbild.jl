@@ -1,4 +1,34 @@
-function compute_initial_conditions(global_params, species_params, species_data)
+function compute_macroscopic_parameters!(global_macro_params, species_macro_params, species_data, n_species, particles)
+    
+    global_macro_params.ndens = 0.0
+
+    for species_id in 1:n_species
+        ndens = 0.0
+        species_macro_params[species_id].vel = [0.0, 0.0, 0.0]
+        species_macro_params[species_id].ndens = 0.0
+        for i in 1:species_macro_params[species_id].nparticles
+            species_macro_params[species_id].vel += particles[i].vel
+            species_macro_params[species_id].ndens += particles[i].fnum
+        end
+
+        species_macro_params[species_id].vel /= species_macro_params[species_id].nparticles
+        global_macro_params.ndens += species_macro_params[species_id].ndens
+    end
+
+
+    for species_id in 1:n_species
+        species_macro_params[species_id].kinetic_energy = 0.0
+        for i in 1:species_macro_params[species_id].nparticles
+            vel = particles[i].vel - species_macro_params[species_id].vel
+            species_macro_params[species_id].kinetic_energy += sum(vel.*vel)
+        end
+        species_macro_params[species_id].kinetic_energy *= 0.5 * species_data[species_id].mass
+        species_macro_params[species_id].T = (2.0 / 3.0) * species_macro_params[species_id].kinetic_energy / (constants.k * (species_macro_params[species_id].nparticles - 1))
+    end
+
+end
+
+function compute_initial_conditions!(global_params, species_params, species_data)
     for species_param in species_params
         species_param.nparticles = round(Int64, global_params.ndens / species_param.fnum)
 
@@ -6,7 +36,7 @@ function compute_initial_conditions(global_params, species_params, species_data)
     end
 end
 
-function check_initial_conditions_species(global_params, species_params, global_fnum, global_T, full_init_species)
+function check_initial_conditions_species!(global_params, species_params, global_fnum, global_T, full_init_species)
     for sp in species_params
         if (global_fnum)
             if sp.fnum < 0.0
@@ -64,7 +94,7 @@ function check_initial_conditions_species(global_params, species_params, global_
     end
 end
 
-function check_initial_conditions(global_params, species_params)
+function check_initial_conditions!(global_params, species_params)
     # check initial conditions for consistency
     global_fnum = false
     global_np = false
@@ -122,5 +152,5 @@ function check_initial_conditions(global_params, species_params)
         error("Cannot specify global number density, fnum and number of particles simultaneously")
     end
 
-    check_initial_conditions_species(global_params, species_params, global_fnum, global_T, full_init_species)
+    check_initial_conditions_species!(global_params, species_params, global_fnum, global_T, full_init_species)
 end
