@@ -27,8 +27,32 @@ mutable struct GlobalParams
     rho::Float64
     T::Float64
 
+    n_species::Int64
     timestep::Float64
-    num_timesteps::Int64
+    n_timesteps::Int64
     use_single_fnum::Bool  # if fnum is the same for all species, we can simplify collision scheme
     # add species list!!!
+end
+
+mutable struct MacroParams
+    vel::Array{Float64,1}
+    ndens::Float64
+    T::Float64
+    kinetic_energy::Float64
+    nparticles::Int64
+end
+
+
+function create_macroscopic_parameters(species_params, n_species)
+    species_macro_params = MacroParams[]
+
+    for i=1:n_species
+        smp = MacroParams([0.0, 0.0, 0.0], 0.0, 0.0, 0.0, species_params[i].nparticles)
+
+        push!(species_macro_params, smp)
+    end
+
+    global_macro_params = MacroParams([0.0, 0.0, 0.0], 0.0, 0.0, 0.0, 0)
+
+    return global_macro_params, species_macro_params
 end
