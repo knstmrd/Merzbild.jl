@@ -5,17 +5,26 @@ interactions file: interactions.yaml
 
 initial conditions:
   - species: N
-    # ndens: 1e23
-    fnum: 1e16
+    ndens: 1e18
+    fnum: 1e15
     nfrac: 1.0
     distribution function: Maxwellian
     distribution function offset: [0.0, 0.0, 0.0]
     T: 300
+    
+    # none, oversample, split
+    # if oversample, 
+    variable weight: split
 
-global ndens: 1e23
+    # sample more particles, and split everything outside some velocity region
+    split factor: 2
+    split at mean thermal velocity: [2.0]
+    split offset: [0.0, 0.0, 0.0]
+
+
 # global fnum: 1e16
 # global p: 101325
 # global T: 293
 
 timestep: 1e-7
-number of timesteps: 1000
+number of timesteps: 10
