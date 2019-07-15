@@ -20,13 +20,6 @@ mutable struct GlobalParams
     species_file::String
     interactions_file::String
 
-    fnum::Float64
-    nparticles::Int64
-    ndens::Float64
-    p::Float64
-    rho::Float64
-    T::Float64
-
     n_species::Int64
     timestep::Float64
     n_timesteps::Int64
